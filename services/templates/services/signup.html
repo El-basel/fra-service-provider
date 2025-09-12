@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}FRA Services{% endblock %}
+
+{% block content %}
+
+ <form method="post" action="{% url 'signup_view' %}">
+    {% csrf_token %}
+    <div class="fieldWrapper">
+      {{form.username.errors}}
+      <label for="{{form.username.id_for_label">Username</label>
+      {{form.username}}
+    </div>
+   <div class="fieldWrapper">
+      {{form.password.errors}}
+      <label for="{{form.password.id_for_label">Password</label>
+      {{form.password}}
+    </div>
+   <div class="fieldWrapper">
+      {{form.role.errors}}
+      <label for="{{form.role.id_for_label">Role</label>
+      {{form.role}}
+    </div>
+   <div class="fieldWrapper" id="applicant-type-wrapper">
+      {{form.applicant_type.errors}}
+      <label for="{{form.applicant_type.id_for_label">Applicant Type</label>
+      {{form.applicant_type}}
+    </div>
+    <button type="submit">Login</button>
+</form>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const roleSelect = document.getElementById("id_role");
+  const applicantTypeWrapper = document.getElementById("applicant-type-wrapper");
+
+  function toggleApplicantType() {
+    if (roleSelect.value === "applicant") {
+      applicantTypeWrapper.style.display = "block";
+    } else {
+      applicantTypeWrapper.style.display = "none";
+      document.getElementById("id_applicant_type").value = "";
+    }
+  }
+
+  // Run once at start
+  toggleApplicantType();
+
+  // Run whenever role changes
+  roleSelect.addEventListener("change", toggleApplicantType);
+});
+</script>
+
+{% endblock %}

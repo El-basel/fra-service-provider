@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1>Welcome, {{user.user.username}}</h1>
+<a href="{% url 'request_service' %}">Request Service</a>
+{% if user.service_set.all %}
+    <ul>
+        {% for service in user.service_set.all %}
+        <li><a href="{% url 'payments' service.id%}">{{service.market}} | {{service.type}} | {{service.status}}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+<p>No requested services yet</p>
+    {% endif %}
+{% include 'logout.html' %}
+{% endblock %}
