@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Service Approval{% endblock %}
+
+{% block content %}
+<h1>Applicant: {{ service.applicant.user.username }}</h1>
+    <p>Applicant Type: {{ service.applicant.applicant_type }}</p>
+    <form method="post" action="{% url 'service_approval' service.pk%}">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Send to review</button>
+    </form>
+{% include 'logout.html' %}
+{% endblock %}

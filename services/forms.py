@@ -85,8 +85,19 @@ class RequestServiceForm(forms.Form):
         service = Service.objects.create(
             market=data["market"],
             type=data["type"],
-            applicant=user.userprofile.pk,
+            applicant=user.userprofile,
         )
 
         return service
 
+class ServiceApprovalForm(forms.Form):
+    fee = forms.IntegerField(required=True)
+    fixed = forms.BooleanField(required=False)
+
+    def save(self, pk):
+        service = Service.objects.get(pk=pk)
+        data = self.cleaned_data
+        service.status = Service.Status.REVIEWING
+        service.fee = data["fee"]
+        service.fixed = data["fixed"]
+        service.save()

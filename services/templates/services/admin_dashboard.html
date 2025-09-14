@@ -4,5 +4,15 @@
 
 {% block content %}
 <h1>Welcome Admin, {{user.user.username}}</h1>
+    {% for service in services %}
+        {% if service.status == 'pending' %}
+            <div>
+                <h3><a href="{% url 'service_approval' service.pk%}">{{ service.applicant.user.username }} | {{ service.market }}</a></h3>
+                <p>{{ service.applicant.applicant_type }}</p>
+                <p>{{ service.type }}</p>
+                <p>{{ service.status }}</p>
+            </div>
+        {% endif %}
+    {% endfor %}
 {% include 'logout.html' %}
 {% endblock %}

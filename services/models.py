@@ -55,6 +55,7 @@ class Service(models.Model):
         PENDING = "pending"
         APPROVED = "approved"
         REJECTED = "rejected"
+        REVIEWING = "reviewing"
 
     class Market(models.TextChoices):
         INSURANCE = "insurance"
@@ -66,6 +67,7 @@ class Service(models.Model):
     status = models.CharField(choices=Status.choices, default=Status.PENDING)
     fixed = models.BooleanField(null=True, blank=True)
     applicant = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True)
+    fee = models.IntegerField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

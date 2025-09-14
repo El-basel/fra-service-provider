@@ -47,13 +47,14 @@ def signup_view(request):
 @login_required
 def dashboard(request):
     user = request.user.userprofile
+    services = Service.objects.all()
+    content = {'user': user, 'services': services}
     if user.role == 'admin':
         template_name = 'services/admin_dashboard.html'
     elif user.role == 'reviewer':
         template_name = 'services/reviewer_dashboard.html'
     else:
         template_name = 'services/applicant_dashboard.html'
-    content = {'user': user}
     return render(request, template_name, content)
 
 @login_required
@@ -71,4 +72,20 @@ def request_service(request):
     else:
         form = RequestServiceForm()
         return render(request, "services/request_service.html", {'form': form})
+
+@login_required
+def service_approval(request, pk=0):
+    user = request.user.userprofile
+    if user.role != 'admin':
+        return redirect('dashboard')
+    service = get_object_or_404(Service, pk=pk)
+    if request.method == 'POST':
+        form = ServiceApprovalForm(request.POST)
+        if form.is_valid():
+            form.save(service.pk)
+            return redirect("dashboard")
+    else:
+        form = ServiceApprovalForm()
+    return render(request, 'services/admin_service_approval.html', {'form': form, 'service': service})
+
 

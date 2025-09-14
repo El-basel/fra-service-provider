@@ -9,5 +9,6 @@ urlpatterns = [
     path('accounts/signup/', views.signup_view, name='signup_view'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('request-service/', views.request_service, name='request_service'),
-    path('applicant/payments/<int:service_id>/', views.dashboard, name='payments'),
+    path('service-approval/<int:pk>/', views.service_approval, name='service_approval'),
+    # path('applicant/payments/<int:service_id>/', views.dashboard, name='payments'),
 ]
