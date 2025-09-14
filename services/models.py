@@ -68,6 +68,7 @@ class Service(models.Model):
     fixed = models.BooleanField(null=True, blank=True)
     applicant = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True)
     fee = models.IntegerField(null=True, blank=True)
+    paid = models.BooleanField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

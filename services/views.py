@@ -88,4 +88,62 @@ def service_approval(request, pk=0):
         form = ServiceApprovalForm()
     return render(request, 'services/admin_service_approval.html', {'form': form, 'service': service})
 
+@login_required
+def delete_service(request, pk):
+    user = request.user.userprofile
+    service = get_object_or_404(Service, pk=pk)
+    if service.applicant.pk != request.user.userprofile.pk:
+        return redirect('dashboard') # display and error message that this user isn't allowed to delete this service
+    if request.method == 'GET':
+        if service.status == service.Status.PENDING:
+            service.delete()
+    return redirect("dashboard")
 
+@login_required
+def service_review(request, pk):
+    user = request.user.userprofile
+    if user.role != 'reviewer':
+        return redirect('dashboard')
+    service = get_object_or_404(Service, pk=pk)
+    return render(request, 'services/reviewer_service_review.html', {'service': service})
+
+@login_required
+def service_approve(request, pk):
+    user = request.user.userprofile
+    if user.role != 'reviewer':
+        return redirect('dashboard')
+    service = get_object_or_404(Service, pk=pk)
+    service.status = service.Status.APPROVED
+    service.save()
+    return redirect("dashboard")
+
+@login_required
+def service_reject(request, pk):
+    user = request.user.userprofile
+    if user.role != 'reviewer':
+        return redirect('dashboard')
+    service = get_object_or_404(Service, pk=pk)
+    service.status = service.Status.REJECTED
+    service.save()
+    return redirect("dashboard")
+
+@login_required
+def pay_service(request, pk):
+    user = request.user.userprofile
+    if user.role != 'applicant':
+        return redirect('dashboard')
+    service = get_object_or_404(Service, pk=pk)
+    if service.applicant.pk != request.user.userprofile.pk:
+        return redirect('dashboard')
+    service.paid = True
+    service.save()
+    return redirect("dashboard")
+
+@login_required
+def history(request):
+    user = request.user.userprofile
+    if user.role == 'applicant':
+        return redirect('dashboard')
+    services = Service.objects.all()
+    content = {'user': user, 'services': services}
+    return render(request, 'services/history.html', content)

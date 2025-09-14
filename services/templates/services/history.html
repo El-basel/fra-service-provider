@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}History{% endblock %}
+
+{% block content %}
+<a href="{% url 'dashboard' %}">Dashboard</a>
+<h1>Requests History</h1>
+{% for service in services %}
+    <h3>{{service.applicant.user.username}}</h3>
+    <p>Category: {{service.market}}, Type: {{service.type}}</p>
+    <p>Status: {{service.status}}</p>
+    {% if service.fee %}
+        <p>Fee: {{service.fee}}, Fixed: {{service.fixed}}</p>
+    {% endif %}
+    <p> Paid: {{service.paid | default_if_none:False}}</p>
+{% endfor %}
+{% include 'logout.html' %}
+{% endblock %}

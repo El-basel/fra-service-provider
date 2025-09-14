@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Service Approval{% endblock %}
+{% block title %}Service Review{% endblock %}
 
 {% block content %}
 <h1>Applicant: {{ service.applicant.user.username }}</h1>
     <p>Applicant Type: {{ service.applicant.applicant_type }}</p>
     <p>Category: {{ service.market}}</p>
     <p>Type: {{ service.type}}</p>
-    <form method="post" action="{% url 'service_approval' service.pk%}">
-        {% csrf_token %}
-        {{ form }}
-        <button type="submit">Send to review</button>
-    </form>
+    <p>Fee: {{ service.fee}}</p>
+    <p>Fixed: {{ service.fixed}}</p>
+    <a href="{% url 'service_approve' service.pk %}">Approve</a>
+    <a href="{% url 'service_reject' service.pk %}">Reject</a>
+<br>
 {% include 'logout.html' %}
 {% endblock %}

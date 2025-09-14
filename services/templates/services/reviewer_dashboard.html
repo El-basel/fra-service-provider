@@ -3,6 +3,18 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
+<a href="{% url 'history' %}">Requests History</a>
 <h1>Welcome Reviewer, {{user.user.username}}</h1>
+    {% for service in services %}
+        {% if service.status == 'reviewing' %}
+            <div>
+                <h3><a href="{% url 'service_review' service.pk%}">{{ service.applicant.user.username }} | {{ service.market }}</a></h3>
+                <p>Applicant Type: {{ service.applicant.applicant_type }}</p>
+                <p>Type: {{ service.type }}</p>
+                <p>Status: {{ service.status }}</p>
+                <p>Fee: {{ service.fee }} EGP, Fixed: {{ service.fixed }}</p>
+            </div>
+        {% endif %}
+    {% endfor %}
 {% include 'logout.html' %}
 {% endblock %}

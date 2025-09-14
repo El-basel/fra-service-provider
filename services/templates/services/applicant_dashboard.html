@@ -8,7 +8,22 @@
 {% if user.service_set.all %}
     <ul>
         {% for service in user.service_set.all %}
-        <li><a href="">{{service.market}} | {{service.type}} | {{service.status}}</a></li>
+            {% if not service.paid and service.status != 'rejected' %}
+                <li>
+                    <p>Category: {{service.market}}, Type: {{service.type}}</p>
+                    <p>Status: {{service.status}}</p>
+                    {%if service.fee%}
+                    <p> Fee: {{service.fee}}, Fixed: {{service.fixed}}</p>
+                    {%endif%}
+                    {% if service.status == 'pending' %}
+                        <a href="{% url 'delete_service' service.pk %}">Delete Service</a>
+                    {% endif %}
+                    {% if not service.paid and service.status == 'approved' %}
+                        <a href="{% url 'pay_service' service.pk %}">Pay Fees</a>
+                    {% endif %}
+
+                </li>
+            {% endif %}
         {% endfor %}
     </ul>
 {% else %}

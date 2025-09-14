@@ -94,6 +94,14 @@ class ServiceApprovalForm(forms.Form):
     fee = forms.IntegerField(required=True)
     fixed = forms.BooleanField(required=False)
 
+    def clean(self):
+        cleaned_data = super().clean()
+        fee = cleaned_data.get("fee")
+        if fee < 0:
+            raise ValidationError("Fee should be greater than 0.")
+        return cleaned_data
+
+
     def save(self, pk):
         service = Service.objects.get(pk=pk)
         data = self.cleaned_data

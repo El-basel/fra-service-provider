@@ -10,5 +10,10 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('request-service/', views.request_service, name='request_service'),
     path('service-approval/<int:pk>/', views.service_approval, name='service_approval'),
-    # path('applicant/payments/<int:service_id>/', views.dashboard, name='payments'),
+    path('delete-service/<int:pk>/', views.delete_service, name='delete_service'),
+    path('service-review/<int:pk>/', views.service_review, name='service_review'),
+    path('service-approve/<int:pk>/', views.service_approve, name='service_approve'),
+    path('service-reject/<int:pk>/', views.service_reject, name='service_reject'),
+    path('pay-service/<int:pk>/', views.pay_service, name='pay_service'),
+    path('history/', views.history, name='history'),
 ]
