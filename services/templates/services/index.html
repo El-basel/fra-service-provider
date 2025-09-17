@@ -3,9 +3,41 @@
 {% block title %}FRA Services {% endblock %}
 
 {% block content %}
+<div class="mb-4">
+    <a href="{% url 'login_view' %}" class="btn btn-primary">Login</a>
+    <a href="{% url 'signup_view' %}" class="btn btn-primary">Signup</a>
+</div>
+<div class="card shadow-lg mb-4 border-0">
+    <div class="card-body text-center py-4">
+        <h1 class="card-title display-5 text-primary text-capitalize fw-bold">
+            Welcome to FRA Services Requester
+        </h1>
+    </div>
+</div>
+<section class="container my-3">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow-lg rounded-3">
+                <div class="card-body text-center">
+                    <h1 class="mb-2 text-primary">About</h1>
+                    <p class="fw-bold lead">
+                        FRA Service Requester provides solution for Companies and Individual
+                        to request license or issues for Insurance, Mortgage or CMA
+                    </p>
+                    <p class="fw-bold lead">
+                        1. You can sign in as an applicant and choose whether you are a company or an individual.
+                    </p>
+                    <p class="fw-bold lead">
+                        2. Request the service you want and wait until approval.
+                    </p>
+                    <p class="fw-bold lead">
+                        3. Pay the amount required for the service
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-<h1>Welcome To FRA Services</h1>
-<a href="{% url 'login_view' %}">Login</a>
-<a href="{% url 'signup_view' %}">Signup</a>
 
 {% endblock %}

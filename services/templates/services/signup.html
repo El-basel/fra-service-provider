@@ -4,36 +4,78 @@
 
 {% block content %}
 
- <form method="post" action="{% url 'signup_view' %}">
-    {% csrf_token %}
-    <div class="fieldWrapper">
-      {{form.username.errors}}
-      <label for="{{form.username.id_for_label">Username</label>
-      {{form.username}}
+<div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <!-- Bootstrap Card -->
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <!-- Bootstrap Card Header -->
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h2 class="mb-1">
+                        <i class="bi bi-shield-lock me-2"></i>Sign up
+                    </h2>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" action="{% url 'signup_view' %}">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <!-- Bootstrap Floating Labels -->
+                            {% if field.name == 'applicant_type' %}
+                                <div class="form-floating mb-3" id="applicant-type-wrapper">
+                                    {{field}}
+                                    <label for="{{ field.id_for_label }}">
+                                        {{ field.label }}
+                                    </label>
+                                    {% if field.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in field.errors %}
+                                                <small class="text-danger">{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <div class="form-floating mb-3">
+                                    {{field}}
+                                    <label for="{{ field.id_for_label }}">
+                                        {% if field.name == 'username' %}
+                                            <i class="bi bi-person me-2"></i>
+                                        {% elif field.name == 'password' %}
+                                            <i class="bi bi-key me-2"></i>
+                                        {% endif %}
+                                        {{ field.label }}
+                                    </label>
+                                    {% if field.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in field.errors %}
+                                                <small class="text-danger">{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                        <!-- Bootstrap Grid Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>
+                                Login to Dashboard
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-   <div class="fieldWrapper">
-      {{form.password.errors}}
-      <label for="{{form.password.id_for_label">Password</label>
-      {{form.password}}
-    </div>
-   <div class="fieldWrapper">
-      {{form.role.errors}}
-      <label for="{{form.role.id_for_label">Role</label>
-      {{form.role}}
-    </div>
-   <div class="fieldWrapper" id="applicant-type-wrapper">
-      {{form.applicant_type.errors}}
-      <label for="{{form.applicant_type.id_for_label">Applicant Type</label>
-      {{form.applicant_type}}
-    </div>
-    <button type="submit">Sign up</button>
-</form>
-<script>
+{% endblock %}
+{% block script %}
+<script defer>
 document.addEventListener("DOMContentLoaded", function() {
   const roleSelect = document.getElementById("id_role");
   const applicantTypeWrapper = document.getElementById("applicant-type-wrapper");
 
   function toggleApplicantType() {
+    console.log(applicantTypeWrapper)
     if (roleSelect.value === "applicant") {
       applicantTypeWrapper.style.display = "block";
     } else {

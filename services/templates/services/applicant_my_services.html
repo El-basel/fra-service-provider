@@ -10,17 +10,18 @@
 <div class="card shadow-lg mb-4 border-0">
     <div class="card-body text-center py-4">
         <h1 class="card-title display-5 text-primary text-capitalize fw-bold">
-            <i class="bi bi-archive me-3"></i>Requests History
+            <i class="bi bi-archive me-3"></i>My Services
         </h1>
     </div>
 </div>
+{% if user.service_set.all %}
 <div class="row g-4">
-    {% for service in services %}
+    {% for service in user.service_set.all %}
          <div class="col-lg-6">
             <div class="card h-100 shadow service-card border-0 border-start border-danger border-4">
                 <div class="card-body">
                     <h5 class="card-title text-muted text-capitalize fw-bold">
-                        {{ service.applicant.user.username }}, {{ service.market }}
+                        {{ service.market }}
                     </h5>
                     <div class="row g-2 mt-2">
                         <div class="col-sm-4">
@@ -91,4 +92,16 @@
         </div>
     {% endfor %}
 </div>
+{% else %}
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body text-center py-5">
+                <i class="bi bi-inbox display-1 text-muted mb-4"></i>
+                <h3 class="text-muted mb-3">No Services</h3>
+                <p class="text-muted lead mb-4">Request a service</p>
+                <span class="badge bg-success fs-6 px-4 py-2 rounded-pill">
+                    <i class="bi bi-trophy me-2"></i>All caught up!
+                </span>
+            </div>
+        </div>
+{% endif %}
 {% endblock %}

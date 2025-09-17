@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib import messages
 from .models import *
 from .forms import *
+from django.db.models import Q
 # Create your views here.
 def index(request):
     if request.user.is_authenticated:
@@ -19,7 +19,6 @@ def login_view(request):
                 login(request, user)
                 return redirect("dashboard")
             else:
-                messages.error(request, "Invalid username or password")
                 return render(request, "services/login.html", {'form': form})
     else:
         form = LoginForm()
@@ -48,13 +47,15 @@ def signup_view(request):
 def dashboard(request):
     user = request.user.userprofile
     services = Service.objects.all()
-    content = {'user': user, 'services': services}
     if user.role == 'admin':
+        services = Service.objects.filter(status=Service.Status.PENDING)
         template_name = 'services/admin_dashboard.html'
     elif user.role == 'reviewer':
+        services = Service.objects.filter(status=Service.Status.REVIEWING)
         template_name = 'services/reviewer_dashboard.html'
     else:
         template_name = 'services/applicant_dashboard.html'
+    content = {'user': user, 'services': services}
     return render(request, template_name, content)
 
 @login_required
@@ -84,6 +85,10 @@ def service_approval(request, pk=0):
         if form.is_valid():
             form.save(service.pk)
             return redirect("dashboard")
+        else:
+            print("Form errors")
+            for error in form.errors:
+                print(error)
     else:
         form = ServiceApprovalForm()
     return render(request, 'services/admin_service_approval.html', {'form': form, 'service': service})
@@ -147,3 +152,11 @@ def history(request):
     services = Service.objects.all()
     content = {'user': user, 'services': services}
     return render(request, 'services/history.html', content)
+
+@login_required
+def my_services(request):
+    user = request.user.userprofile
+    if user.role == 'applicant':
+        return render(request,'applicant_my_services.html', {'user' : user})
+    else:
+        return redirect('dashboard')

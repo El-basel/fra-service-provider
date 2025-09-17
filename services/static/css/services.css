@@ -1,0 +1,20 @@
+body {
+    background: linear-gradient(135deg, #264e97 0%, #2a5298 100%);
+    min-height: 100vh;
+}
+
+.glass-effect {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.service-card:hover {
+    transform: translateY(-2px);
+}
+
+.bg-pending {
+    background-color: #fff3cd !important;
+    color: #856404 !important;
+    border-color: #ffeaa7 !important;
+}

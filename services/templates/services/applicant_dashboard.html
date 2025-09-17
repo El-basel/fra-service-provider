@@ -3,31 +3,95 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<h1>Welcome, {{user.user.username}}</h1>
-<a href="{% url 'request_service' %}">Request Service</a>
+<div class="mb-4">
+    {% include 'logout.html' %}
+    <a href="{% url 'request_service' %}" class="btn btn-primary">
+        <i class="bi bi-envelope-paper me-2"></i>Request Service
+    </a>
+    <a href="{% url 'my_services' %}" class="btn btn-primary">
+        <i class="bi bi-archive me-2"></i>My Services
+    </a>
+</div>
+<div class="card shadow-lg mb-4 border-0">
+    <div class="card-body text-center py-4">
+        <h1 class="card-title display-5 text-primary text-capitalize fw-bold">
+            <i class="bi bi-person-circle me-3"></i>Welcome, {{user.user.username}}
+        </h1>
+    </div>
+</div>
 {% if user.service_set.all %}
-    <ul>
-        {% for service in user.service_set.all %}
-            {% if not service.paid and service.status != 'rejected' %}
-                <li>
-                    <p>Category: {{service.market}}, Type: {{service.type}}</p>
-                    <p>Status: {{service.status}}</p>
-                    {%if service.fee%}
-                    <p> Fee: {{service.fee}}, Fixed: {{service.fixed}}</p>
-                    {%endif%}
-                    {% if service.status == 'pending' %}
-                        <a href="{% url 'delete_service' service.pk %}">Delete Service</a>
-                    {% endif %}
-                    {% if not service.paid and service.status == 'approved' %}
-                        <a href="{% url 'pay_service' service.pk %}">Pay Fees</a>
-                    {% endif %}
-
-                </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-{% else %}
-<p>No requested services yet</p>
+    <div class="row g-4">
+            {% for service in user.service_set.all %}
+                {% if not service.paid and service.status != 'rejected' %}
+                    <div class="col-lg-6">
+                        <div class="card h-100 shadow service-card border-0 border-start border-danger border-4">
+                            <div class="card-body">
+                                <h5 class="card-title text-muted text-capitalize fw-bold">
+                                    {{service.market}}, {{service.type}}
+                                </h5>
+                                <div class="row g-2 mt-2">
+                                    <div class="col-sm-4">
+                                        <div class="bg-light rounded p-2">
+                                            <small class="text-muted text-uppercase fw-bold">Status</small>
+                                            <div>
+                                                {% if service.status == 'pending' %}
+                                                    <span class="badge bg-pending rounded-pill">
+                                                        <i class="bi bi-clock me-1"></i>Pending
+                                                    </span>
+                                                {% elif service.status == 'reviewing' %}
+                                                    <span class="badge bg-pending rounded-pill">
+                                                        <i class="bi bi-clock me-1"></i>Reviewing
+                                                    </span>
+                                                {% elif service.status == 'approved' %}
+                                                    <span class="badge bg-success rounded-pill">
+                                                        <i class="bi bi-check-circle me-1"></i>Approved
+                                                    </span>
+                                                {% elif service.status == 'rejected' %}
+                                                    <span class="badge bg-danger rounded-pill">
+                                                        <i class="bi bi-x-circle me-1"></i>Rejected
+                                                    </span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {%if service.fee%}
+                                    <div class="col-sm-4">
+                                        <div class="bg-light rounded p-2">
+                                            <small class="text-muted text-uppercase fw-bold">Fee</small>
+                                            <div>
+                                                <span>
+                                                    <i class="bi bi-currency-dollar"></i>{{service.fee}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="bg-light rounded p-2">
+                                            <small class="text-muted text-uppercase fw-bold">Fixed</small>
+                                            <div>
+                                                <span>
+                                                    {{service.fixed}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {%endif%}
+                                    {% if service.status == 'pending' %}
+                                        <a href="{% url 'delete_service' service.pk %}" class="btn btn-outline-dark btn-lg">
+                                            <i class="bi bi-trash me-2"></i>Delete Service
+                                        </a>
+                                    {% endif %}
+                                    {% if not service.paid and service.status == 'approved' %}
+                                        <a href="{% url 'pay_service' service.pk %}" class="btn btn-outline-dark btn-lg">
+                                            <i class="bi bi-cash me-2"></i>Pay Fees
+                                         </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+    </div>
 {% endif %}
-{% include 'logout.html' %}
 {% endblock %}
